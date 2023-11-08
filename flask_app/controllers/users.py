@@ -1,6 +1,9 @@
 from flask import render_template, request, redirect, session, flash, url_for
 from flask_app.models import user as user_module
 from flask_app import app
+from flask_bcrypt import Bcrypt, generate_password_hash, check_password_hash
+
+bcrypt = Bcrypt(app)
 
 @app.route('/login')
 def login_page():
