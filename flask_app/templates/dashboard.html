@@ -7,6 +7,14 @@
 </head>
 <body>
     <h1>Hello, {{user.first_name}} {{user.last_name}}</h1>
+    <br>
+    <h2>Your Programs</h2>
+    {% for program in program_list %}
+        <p>Program Name: {{ program.title }}</p>
+        <p>Program Description: {{ program.description }}</p>
+    {% endfor %}
+    <br>
+    <a href="/create/program">Create a Program</a>
     <form action="/logout" method="POST">
         <button>Logout</button>
     </form>

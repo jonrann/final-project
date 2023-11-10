@@ -1,4 +1,4 @@
-from flask import request, flash
+from flask import flash
 from flask_app.config.mysqlconnection import connectToMySQL
 import re
 
@@ -14,6 +14,7 @@ class User:
         self.password = data['password']
         self.created_at = data['created_at']
         self.updated_at = data['updated_at']
+        self.programs = []
 
     #CRUD Functions
 

@@ -1,5 +1,6 @@
 from flask import render_template, request, redirect, session, flash, url_for
 from flask_app.models import user as user_module
+from flask_app.models import program as program_module
 from flask_app import app
 from flask_bcrypt import Bcrypt, generate_password_hash, check_password_hash
 
@@ -14,12 +15,13 @@ def login_page():
 
 @app.route('/dashboard')
 def dashboard():
-    if session['user_id']:
-        user = user_module.User.get_one_by_id(session['user_id'])
-        return render_template('dashboard.html', user=user)
-    else:
-        flash('Please log in to access dashboard')
-        return render_template('register.html')
+    if 'user_id' in session:
+        user_id = session['user_id']
+        user = user_module.User.get_one_by_id(user_id)
+        program_list = program_module.Program.get_all_by_user_id(user.id)
+        return render_template('dashboard.html', user=user, program_list=program_list)
+    flash('Please log in to access dashboard')
+    return render_template('register.html')
 
 
 # ----- POST ROUTES -----
@@ -54,7 +56,7 @@ def login():
     }
     # Check if email is in DB and create user object if true
     user = user_module.User.get_one_by_email(user_data['email'])
-    
+
     if user:
         # Check password if it matches hashed password in DB
         if check_password_hash(user.password, user_data['password']):
