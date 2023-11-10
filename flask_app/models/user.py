@@ -1,4 +1,4 @@
-from flask import request
+from flask import request, flash
 from flask_app.config.mysqlconnection import connectToMySQL
 import re
 
@@ -7,6 +7,7 @@ EMAIL_REGEX = re.compile(r'^[a-zA-Z0-9.+_-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]+$')
 
 class User:
     def __init__(self, data) -> None:
+        self.id = data['id']
         self.first_name = data['first_name']
         self.last_name = data['last_name']
         self.email = data['email']
@@ -85,3 +86,39 @@ class User:
         else:
             return "User not found", None
 
+
+    # Validator
+    @staticmethod
+    def validate_user(data):
+        is_valid = True
+        # Validate first name
+        if len(data['first_name']) < 3:
+            flash('First name needs to be at least 3 characters', 'register_error')
+            is_valid = False
+
+        # Validate last name
+        if len(data['last_name']) < 3:
+            flash('Last name needs to be at least 3 characters', 'register_error')
+            is_valid = False
+
+        # Validate email
+        if not EMAIL_REGEX.match(data['email']):
+            flash('Invalid email', 'register_error')
+            is_valid = False
+
+        # Validate password
+        if len(data['password']) < 5:
+            flash('Password needs to be at least 3 characters', 'register_error')
+            is_valid = False
+        if not re.search("[A-Z]", data['password']):
+            flash('Password needs at least 1 capital letter', 'register_error')
+            is_valid = False
+        if not re.search("[0-9]", data['password']):
+            flash('Password needs at least 1 number', 'register_error')
+            is_valid = False
+
+        # Validate confirme password
+        if data['password'] != data['confirm_password']:
+            flash('Passwords do not match', 'register_error')
+            is_valid = False
+        return is_valid
