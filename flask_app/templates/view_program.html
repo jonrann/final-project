@@ -1,0 +1,18 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Program Details</title>
+</head>
+<body>
+    <h1>Program Title: {{program.title}}</h1>
+    <h2>Program Details: {{program.description}}</h2>
+    <h3>Program Weeks: {{program.weeks}}</h3>
+    <form action="/create-week/{{program.id}}" method="POST">
+        <label for="weeknumber">Add Week</label>
+        <input type="number" name="weeknumber" id="weeknumber">
+        <input type="submit" value="Create Week">
+    </form>
+</body>
+</html>

@@ -9,6 +9,7 @@ class Program:
         self.description = data['description']
         self.user_id = data['user_id']
         self.owner = None # Add the user object here
+        self.weeks = [] # Add week objects here
 
     @classmethod
     def create_program(cls, data):

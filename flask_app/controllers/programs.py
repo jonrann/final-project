@@ -1,11 +1,21 @@
 from flask import render_template, request, redirect, session, flash, url_for
 from flask_app.models import user as user_module
 from flask_app.models import program as program_module
+from flask_app.models import week as week_module
+
 from flask_app import app
 
 @app.route('/create/program')
 def create_program_page():
     return render_template('create_program.html')
+
+
+@app.route('/program/<int:program_id>')
+def view_program_page(program_id):
+    program = program_module.Program.get_by_id(program_id)
+    weeks = week_module.Week.get_all_weeks_from_program_id(program_id)
+    print(f"This is the list of weeks: {weeks}")
+    return render_template('view_program.html', program=program, weeks_list=weeks_list)
 
 
 @app.route('/create-program', methods=['POST'])

@@ -10,8 +10,9 @@
     <br>
     <h2>Your Programs</h2>
     {% for program in program_list %}
-        <p>Program Name: {{ program.title }}</p>
+        <p>Program Name: <a href="/program/{{program.id}}">{{ program.title }}</a></p>
         <p>Program Description: {{ program.description }}</p>
+        <p># of Weeks: 4</p>
     {% endfor %}
     <br>
     <a href="/create/program">Create a Program</a>
