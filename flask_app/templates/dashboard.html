@@ -12,7 +12,8 @@
     {% for program in program_list %}
         <p>Program Name: <a href="/program/{{program.id}}">{{ program.title }}</a></p>
         <p>Program Description: {{ program.description }}</p>
-        <p># of Weeks: 4</p>
+        <p>Length of Program: {{program.weeks|length}} Weeks</p>
+        <br> ---------
     {% endfor %}
     <br>
     <a href="/create/program">Create a Program</a>

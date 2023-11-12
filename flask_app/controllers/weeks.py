@@ -5,7 +5,7 @@ from flask_app.models import week as week_module
 from flask_app import app
 
 
-@app.route('/create-week/<program_id>', methods=['POST'])
+@app.route('/create-week/<int:program_id>', methods=['POST'])
 def create_week(program_id):
     user_id = session.get('user_id')
     if not user_id:
@@ -24,7 +24,17 @@ def create_week(program_id):
     # Create week object by using week id
     week = week_module.Week.get_week_by_id(week_id)
 
-    program.weeks.append(week)
-    print(f"These are the weeks in the program {program.weeks}")
+    program.add_week(week)
 
+    return redirect(url_for('view_program_page', program=program, program_id=program_id))
+
+@app.route('/delete-week/<int:week_id>/<int:program_id>', methods=['POST'])
+def delete_week(week_id, program_id):
+    user_id = session.get('user_id')
+    if not user_id:
+        flash('Log in to create a program', 'danger')
+        return redirect(url_for('login_page'))
+    if week_module.Week.delete_week(week_id):
+        return redirect(url_for('view_program_page', program_id=program_id))
+    flash('Failed to delete week', 'danger')
     return redirect(url_for('view_program_page', program_id=program_id))

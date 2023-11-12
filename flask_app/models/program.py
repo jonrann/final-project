@@ -1,6 +1,7 @@
 from flask import flash, session
 from flask_app.config.mysqlconnection import connectToMySQL
 from flask_app.models import user as user_module
+from flask_app.models import week as week_module
 
 class Program:
     def __init__(self, data) -> None:
@@ -10,6 +11,14 @@ class Program:
         self.user_id = data['user_id']
         self.owner = None # Add the user object here
         self.weeks = [] # Add week objects here
+
+    def add_week(self, week):
+        self.weeks.append(week)
+    
+    def get_all_weeks(self):
+        self.weeks = week_module.Week.get_all_by_program_id(self.id)
+        return self.weeks
+
 
     @classmethod
     def create_program(cls, data):

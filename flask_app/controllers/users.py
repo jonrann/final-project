@@ -1,6 +1,7 @@
 from flask import render_template, request, redirect, session, flash, url_for
 from flask_app.models import user as user_module
 from flask_app.models import program as program_module
+from flask_app.models import week as week_module
 from flask_app import app
 from flask_bcrypt import Bcrypt, generate_password_hash, check_password_hash
 
@@ -19,6 +20,9 @@ def dashboard():
         user_id = session['user_id']
         user = user_module.User.get_one_by_id(user_id)
         program_list = program_module.Program.get_all_by_user_id(user.id)
+        for program in program_list:
+            program.get_all_weeks()
+
         return render_template('dashboard.html', user=user, program_list=program_list)
     flash('Please log in to access dashboard')
     return render_template('register.html')

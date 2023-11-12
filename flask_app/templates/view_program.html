@@ -8,11 +8,17 @@
 <body>
     <h1>Program Title: {{program.title}}</h1>
     <h2>Program Details: {{program.description}}</h2>
-    <h3>Program Weeks: {{program.weeks}}</h3>
+    {% for week in program.weeks %}
+        <h3>Program Weeks: {{week.weeknumber}}</h3>
+        <form action="/delete-week/{{ week.id }}/{{ program.id }}" method="POST">
+            <button type="submit">Delete</button>
+        </form>
+    {% endfor %}
     <form action="/create-week/{{program.id}}" method="POST">
         <label for="weeknumber">Add Week</label>
         <input type="number" name="weeknumber" id="weeknumber">
         <input type="submit" value="Create Week">
     </form>
+    <a href="/dashboard">Home</a>
 </body>
 </html>

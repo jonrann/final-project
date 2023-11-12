@@ -13,9 +13,8 @@ def create_program_page():
 @app.route('/program/<int:program_id>')
 def view_program_page(program_id):
     program = program_module.Program.get_by_id(program_id)
-    weeks = week_module.Week.get_all_weeks_from_program_id(program_id)
-    print(f"This is the list of weeks: {weeks}")
-    return render_template('view_program.html', program=program, weeks_list=weeks_list)
+    program.get_all_weeks()
+    return render_template('view_program.html', program=program)
 
 
 @app.route('/create-program', methods=['POST'])

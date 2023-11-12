@@ -25,15 +25,16 @@ class Week:
         return connectToMySQL('workout_tracker_schema').query_db(query, data)
 
     @classmethod
-    def get_all_weeks_from_program_id(cls, program_id):
+    def get_all_by_program_id(cls, program_id):
         query = "SELECT * FROM weeks WHERE program_id = %(program_id)s;"
-
         data = {
-            'id': program_id
+            'program_id': program_id
         }
+
         results = connectToMySQL('workout_tracker_schema').query_db(query, data)
 
         weeks = []
+
         for row in results:
             weeks.append(cls(row))
         return weeks
@@ -50,3 +51,13 @@ class Week:
         if result:
             return cls(result[0])
         return None
+    
+    @classmethod
+    def delete_week(cls, week_id):
+        query = "DELETE FROM weeks WHERE id = %(id)s;"
+
+        data = {
+            'id': week_id
+        }
+
+        return connectToMySQL('workout_tracker_schema').query_db(query, data)
