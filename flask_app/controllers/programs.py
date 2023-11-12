@@ -12,20 +12,20 @@ def create_program_page():
 
 @app.route('/program/<int:program_id>')
 def view_program_page(program_id):
+    # Get one specific program
     program = program_module.Program.get_by_id(program_id)
+    # Get all the weeks associated with that program
     program.get_all_weeks()
     return render_template('view_program.html', program=program)
 
 
 @app.route('/create-program', methods=['POST'])
 def create_program():
-
     # Check if user is logged in
     user_id = session.get('user_id')
     if not user_id:
         flash('Log in to create a program', 'danger')
         return redirect(url_for('login_page'))
-
 
     # Retrieve data from form
     program_data = dict(request.form)

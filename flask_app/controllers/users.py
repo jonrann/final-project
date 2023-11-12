@@ -19,7 +19,9 @@ def dashboard():
     if 'user_id' in session:
         user_id = session['user_id']
         user = user_module.User.get_one_by_id(user_id)
+        # Get all programs made from the user
         program_list = program_module.Program.get_all_by_user_id(user.id)
+        # Get all the weeks associated with each program
         for program in program_list:
             program.get_all_weeks()
 
