@@ -16,9 +16,31 @@
         <input type="text" name="usernotes" id="usernotes" value="{{ day.usernotes }}">
         <input type="submit" value="Edit">
     </form>
+    <h1>Create a workout:</h1>
+    <form action="/create/workout/{{ program.id }}" method="POST">
+        <input type="text" name="title" id="title" placeholder="Title" required>
+        <br>
+        <input type="text"name="warmup" id="warmup" placeholder="Warm-Up">
+        <br>
+        <input type="text"name="cooldown" id="cooldown" placeholder="Cooldown">
+        <input type="hidden" name="day_id" id="day_id" value="{{ day.id }}">
+        <br>
+        <input type="submit" value="Save Workout">
+    </form>
+
     <h2>Workouts: </h2>
     {% for workout in workouts %}
         <h3>{{ workout.title }}</h3>
+        <h3>Exercises: </h3>
+        {% for exercise in workout.exercises  %}
+            <strong>{{ exercise.title }}</strong>
+            <p>{{ exercise.content }}</p>
+        {% endfor %}
+        <br>
+        <a href="/create/exercise/{{ workout.id }}/{{ day.id }}/{{ program.id }}"><button>Add Exercise</button></a>
+        <form action="/delete/workout/{{ workout.id }}/{{ day.id }}/{{ program.id }}" method="POST">
+            <button>Delete Workout</button>
+        </form>
     {% endfor %}
     <a href="/program/{{ program.id }}">Back</a>
 </body>

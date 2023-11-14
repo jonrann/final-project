@@ -12,6 +12,12 @@ class Workout:
         self.exercises = []
         self.day = None
 
+    def add_exercise(self, exercise):
+        self.exercises.append(exercise)
+
+    def get_all_exercises(self):
+        self.exercises = exercise_module.Exercise.get_all_by_workout_id(self.id)
+
     @classmethod
     def create_workout(cls, data):
         query = """

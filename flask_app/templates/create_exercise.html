@@ -1,0 +1,23 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Exercise</title>
+</head>
+<body>
+    <h1>Add Exercise to {{ workout.title }}:</h1>
+    <form action="/create-exercise/{{ workout.id }}/{{ day.id }}/{{ program.id }}" method="POST">
+        <label for="title">Exercise: </label>
+        <input type="text" name="title" id="title" placeholder="Exercise Name (required)" required>
+        <br>
+        <input type="text" name="content" id="content" placeholder="Sets, Reps, Rest, Tempo, etc.">
+        <br>
+        <input type="hidden" name="workout_id" id="workout_id" value="{{ workout.id }}">
+        <input type="hidden" name="day_id" id="day_id" value="{{ day.id }}">
+        <input type="hidden" name="program_id" id="program_id" value="{{ program.id }}">
+        <input type="submit" value="Add Exercise">
+    </form>
+    <a href="/day/details/{{day_id}}/{{program.id}}">Back</a>
+</body>
+</html>

@@ -18,6 +18,7 @@ def create_workout(program_id):
     print(workout_data)
 
     # Create day object
+
     day = day_module.Day.get_day_by_id(workout_data.get('day_id'))
 
     # Get workout ID when creating a new workout
@@ -28,16 +29,16 @@ def create_workout(program_id):
     day.workouts.append(workout)
     print(day.workouts)
 
-    return redirect(url_for('view_program_page', program_id=program_id))
+    return redirect(url_for('view_day_page', program_id=program_id, day_id=day.id))
 
-@app.route('/delete/workout/<int:workout_id>/<int:program_id>', methods=['POST'])
-def delete_workout(workout_id, program_id):
+@app.route('/delete/workout/<int:workout_id>/<int:day_id>/<int:program_id>', methods=['POST'])
+def delete_workout(workout_id, day_id, program_id):
     user_id = session.get('user_id')
     if not user_id:
         flash('Log in to create a program', 'danger')
         return redirect(url_for('login_page'))
     
     if workout_module.Workout.delete_workout(workout_id):
-        return redirect(url_for('view_program_page', program_id=program_id))
+        return redirect(url_for('view_day_page', day_id=day_id, program_id=program_id))
     flash('Failed to delete workout', 'danger')
-    return redirect(url_for('view_program_page', program_id=program_id))
+    return redirect(url_for('view_day_page', day_id=day_id, program_id=program_id))

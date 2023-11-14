@@ -3,6 +3,7 @@ from flask_app.models import user as user_module
 from flask_app.models import program as program_module
 from flask_app.models import week as week_module
 from flask_app.models import day as day_module
+from flask_app.models import workout as workout_module
 from flask_app import app
 
 # ----- RENDER ROUTES -----
@@ -14,9 +15,11 @@ def edit_day_page():
 
 @app.route('/day/details/<int:day_id>/<int:program_id>')
 def view_day_page(day_id, program_id):
+    program = program_module.Program.get_by_id(program_id)
     day = day_module.Day.get_day_by_id(day_id)
     workouts = day.get_all_workouts()
-    program = program_module.Program.get_by_id(program_id)
+    for workout in workouts:
+        workout.get_all_exercises()
     return render_template('view_day.html', day=day, workouts=workouts, program=program)
 
 
