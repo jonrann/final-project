@@ -17,7 +17,7 @@ def create_week(program_id):
     
     # Retrieve data from form
     week_data = dict(request.form)
-    # Add user_id into retrieved data
+    # Add program_id into retrieved data
     week_data['program_id'] = program_id
 
     # Create program object

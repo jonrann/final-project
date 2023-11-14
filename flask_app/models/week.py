@@ -1,11 +1,20 @@
 from flask import flash, session
 from flask_app.config.mysqlconnection import connectToMySQL
+from flask_app.models import day as day_module
 
 class Week:
     def __init__(self, data) -> None:
         self.id = data['id']
         self.program_id = data['program_id']
         self.weeknumber = data['weeknumber']
+        self.days = []
+
+    def add_day(self, day):
+        self.days.append(day)
+
+    def get_all_days(self):
+        self.days = day_module.Day.get_all_by_week_id(self.id)
+        return self.days
 
     # CRUD
 

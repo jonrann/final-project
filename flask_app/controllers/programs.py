@@ -16,6 +16,9 @@ def view_program_page(program_id):
     program = program_module.Program.get_by_id(program_id)
     # Get all the weeks associated with that program
     program.get_all_weeks()
+    # Get all days associated with each week
+    for week in program.weeks:
+        week.get_all_days()
     return render_template('view_program.html', program=program)
 
 

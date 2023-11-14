@@ -5,10 +5,10 @@ from flask_app.models import week as week_module
 
 class Program:
     def __init__(self, data) -> None:
-        self.id = data['id']
-        self.title = data['title']
-        self.description = data['description']
-        self.user_id = data['user_id']
+        self.id = data.get('id')
+        self.title = data.get('title')
+        self.description = data.get('description')
+        self.user_id = data.get('user_id')
         self.owner = None # Add the user object here
         self.weeks = [] # Add week objects here
 

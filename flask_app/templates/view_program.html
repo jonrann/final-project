@@ -9,7 +9,22 @@
     <h1>Program Title: {{program.title}}</h1>
     <h2>Program Details: {{program.description}}</h2>
     {% for week in program.weeks %}
-        <h3>Program Weeks: {{week.weeknumber}}</h3>
+        <h3>Program Week: {{week.weeknumber}}</h3>
+            {% for day in week.days %}
+                <h4>Day: {{ day.daynumber }}</h4>
+                <form action="/delete/day/{{ day.id }}/{{ program.id }}" method="POST">
+                    <button>Remove</button>
+                </form>
+            {% endfor %}
+        <form action="/create/day/{{ program.id }}" method="POST">
+            <label for="daynumber">Add Day: </label>
+            <input type="number" name="daynumber" id="daynumber">
+            <input type="hidden" name="week_id" value="{{ week.id }}">
+            <input type="hidden" name="completed" value="0">
+            <input type="hidden"name="RPE" value="0">
+            <input type="hidden" name="usernotes" value="">
+            <input type="submit" value="Add">
+        </form>
         <form action="/delete-week/{{ week.id }}/{{ program.id }}" method="POST">
             <button type="submit">Delete</button>
         </form>
