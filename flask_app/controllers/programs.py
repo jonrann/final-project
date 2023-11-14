@@ -24,6 +24,12 @@ def view_program_page(program_id):
             day.get_all_workouts()
     return render_template('view_program2.html', program=program)
 
+@app.route('/edit-program/<int:program_id>')
+def view_edit_program_page(program_id):
+    # Get content for one program
+    program = program_module.Program.get_by_id(program_id)
+    return render_template('edit_program.html', program=program)
+
 
 # ----- POST ROUTES -----
 
@@ -70,3 +76,21 @@ def delete_program(program_id):
     else:
         flash('Failed to delete program', 'danger')
         return redirect(url_for('view_program_page', program_id=program_id))
+
+@app.route('/edit/program/<int:program_id>', methods=['POST'])
+def update_program(program_id):
+    # Make sure user is logged in to delete a program
+    user_id = session.get('user_id')
+    if not user_id:
+        flash('Log in to create a program', 'danger')
+        return redirect(url_for('login_page'))
+    
+    # Retrieve updated data from form
+    new_program_data = dict(request.form)
+    # Take data and run through in query
+    if program_module.Program.update_program(new_program_data):
+        # Redirect to program details page
+        flash('Program successfully updated', 'success')
+        return redirect(url_for('view_program_page', program_id=program_id))
+    flash('Failed to update program', 'danger')
+    return redirect(url_for('view_program_page', program_id=program_id))

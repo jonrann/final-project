@@ -29,3 +29,15 @@ def create_workout(program_id):
     print(day.workouts)
 
     return redirect(url_for('view_program_page', program_id=program_id))
+
+@app.route('/delete/workout/<int:workout_id>/<int:program_id>', methods=['POST'])
+def delete_workout(workout_id, program_id):
+    user_id = session.get('user_id')
+    if not user_id:
+        flash('Log in to create a program', 'danger')
+        return redirect(url_for('login_page'))
+    
+    if workout_module.Workout.delete_workout(workout_id):
+        return redirect(url_for('view_program_page', program_id=program_id))
+    flash('Failed to delete workout', 'danger')
+    return redirect(url_for('view_program_page', program_id=program_id))

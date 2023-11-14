@@ -1,5 +1,6 @@
 from flask import flash, session
 from flask_app.config.mysqlconnection import connectToMySQL
+from flask_app.models import exercise as exercise_module
 
 class Workout:
     def __init__(self, data) -> None:
@@ -58,7 +59,7 @@ class Workout:
         return workouts
     
     @classmethod
-    def delete_day(cls, workout_id):
+    def delete_workout(cls, workout_id):
         query = "DELETE FROM workouts WHERE id = %(id)s;"
 
         data = {

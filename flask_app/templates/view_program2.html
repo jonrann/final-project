@@ -37,6 +37,7 @@
                             {% for day in week.days %}
                                 <td>
                                     <strong>Day {{ day.daynumber }}</strong>
+                                    <a href="/day/details/{{ day.id }}/{{ program.id }}"><button>Info</button></a>
                                     <p>Completed: {{ 'No' if not day.completed else 'Yes' }}</p>
                                     <p>RPE: {{ day.RPE }}</p>
                                     <p>Notes: {{ 'None' if day.usernotes == '' else day.usernotes }}</p>
@@ -44,9 +45,23 @@
                                     <strong>Workouts: </strong>
                                     {% for workout in day.workouts %}
                                         <p>{{ workout.title }}</p>
+                                        <form action="/delete/workout/{{ workout.id }}/{{ program.id }}"method="POST">
+                                            <button>Delete Workout</button>
+                                        </form>
                                         <!-- Add details of the workout here -->
-                                    {% endfor %}
-                                    <!-- Add workout form will go here -->
+                                        {% endfor %}
+                                        <!-- Add workout form will go here -->
+                                        <form action="/create/workout/{{ program.id }}" method="POST">
+                                            <input type="text" name="title" id="title" placeholder="Title" required>
+                                            <br>
+                                            <input type="text"name="warmup" id="warmup" placeholder="Warm-Up">
+                                            <br>
+                                            <input type="text"name="cooldown" id="cooldown" placeholder="Cooldown">
+                                            <input type="hidden" name="day_id" id="day_id" value="{{ day.id }}">
+                                            <br>
+                                            <input type="submit" value="Save Workout">
+                                        </form>
+                                        <br>
                                     <!-- Add day button will go here if day.workouts|count == 0 -->
                                 </td>
                             {% endfor %}

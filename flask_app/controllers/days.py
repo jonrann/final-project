@@ -12,6 +12,13 @@ from flask_app import app
 def edit_day_page():
     return render_template('')
 
+@app.route('/day/details/<int:day_id>/<int:program_id>')
+def view_day_page(day_id, program_id):
+    day = day_module.Day.get_day_by_id(day_id)
+    workouts = day.get_all_workouts()
+    program = program_module.Program.get_by_id(program_id)
+    return render_template('view_day.html', day=day, workouts=workouts, program=program)
+
 
 # ----- POST ROUTES -----
 
