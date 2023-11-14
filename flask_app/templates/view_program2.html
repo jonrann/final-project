@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <title>Program Details</title>
+</head>
+<body class="container mt-5">
+    <div class="row mb-4">
+        <div class="col">
+            <h1>{{ program.title }}</h1>
+            <p>{{ program.description }}</p>
+            <a href="/edit-program/{{ program.id }}" class="btn btn-primary">Edit info</a>
+        </div>
+    </div>
+    {% if program.weeks %}
+    {% for week in program.weeks %}
+        <div class="row mb-3">
+            <div class="col">
+                <h2>Week {{ week.weeknumber }}</h2>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Day 1</th>
+                            <th>Day 2</th>
+                            <th>Day 3</th>
+                            <th>Day 4</th>
+                            <th>Day 5</th>
+                            <th>Day 6</th>
+                            <th>Day 7</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            {% for day in week.days %}
+                                <td>
+                                    <strong>Day {{ day.daynumber }}</strong>
+                                    <p>Completed: {{ 'No' if not day.completed else 'Yes' }}</p>
+                                    <p>RPE: {{ day.RPE }}</p>
+                                    <p>Notes: {{ 'None' if day.usernotes == '' else day.usernotes }}</p>
+                                    <!-- List workouts here -->
+                                    <strong>Workouts: </strong>
+                                    {% for workout in day.workouts %}
+                                        <p>{{ workout.title }}</p>
+                                        <!-- Add details of the workout here -->
+                                    {% endfor %}
+                                    <!-- Add workout form will go here -->
+                                    <!-- Add day button will go here if day.workouts|count == 0 -->
+                                </td>
+                            {% endfor %}
+                        </tr>
+                    </tbody>
+                </table>
+                <!-- Button to add new day will go outside the table if week.days|count < 7 -->
+                {% if week.days|length < 7 %}
+                <form action="/create/day/{{ program.id }}" method="POST">
+                    <label for="daynumber">Add Day: </label>
+                    <input type="number" name="daynumber" id="daynumber">
+                    <input type="hidden" name="week_id" value="{{ week.id }}">
+                    <input type="hidden" name="completed" value="0">
+                    <input type="hidden"name="RPE" value="0">
+                    <input type="hidden" name="usernotes" value="">
+                    <input type="submit" value="Add">
+                </form>
+                {% endif %}
+                <form action="/delete-week/{{ week.id }}/{{ program.id }}" method="POST">
+                    <button type="submit">Remove Week</button>
+                </form>
+            </div>
+        </div>
+    {% endfor %}
+    {% endif %}
+    <div class="row">
+        <div class="col">
+            <form action="/create-week/{{program.id}}" method="POST">
+                <label for="weeknumber">Add Week</label>
+                <input type="number" name="weeknumber" id="weeknumber">
+                <input type="submit" value="Create Week">
+            </form>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <a href="/dashboard" class="btn btn-secondary mt-3">Home</a>
+        </div>
+    </div>
+
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

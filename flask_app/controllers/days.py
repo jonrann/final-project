@@ -25,7 +25,6 @@ def create_day(program_id):
     # Retrieve data from form
     # Hidden input already includes week_id
     day_data = dict(request.form)
-    print(day_data)
 
     # Create week object
     week  = week_module.Week.get_week_by_id(day_data.get('week_id'))

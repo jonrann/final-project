@@ -1,5 +1,6 @@
 from flask import flash, session
 from flask_app.config.mysqlconnection import connectToMySQL
+from flask_app.models import workout as workout_module
 
 class Day:
     def __init__(self, data) -> None:
@@ -9,7 +10,15 @@ class Day:
         self.completed = data.get('completed', False)
         self.RPE = data.get('RPE', 0)
         self.usernotes = data.get('usernotes', '')
+        self.workouts = [] # Can be multiple workouts in a day
         self.week = None
+
+    def add_workout(self, workout):
+        self.workouts.append(workout)
+
+    def get_all_workouts(self):
+        self.workouts = workout_module.Workout.get_all_by_day_id(self.id)
+        return self.workouts
 
     @classmethod
     def create_day(cls, data):

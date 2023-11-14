@@ -19,7 +19,10 @@ def view_program_page(program_id):
     # Get all days associated with each week
     for week in program.weeks:
         week.get_all_days()
-    return render_template('view_program.html', program=program)
+    if program.weeks:
+        for day in week.days:
+            day.get_all_workouts()
+    return render_template('view_program2.html', program=program)
 
 
 # ----- POST ROUTES -----

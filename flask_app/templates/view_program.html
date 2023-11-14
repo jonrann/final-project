@@ -12,10 +12,32 @@
         <h3>Program Week: {{week.weeknumber}}</h3>
             {% for day in week.days %}
                 <h4>Day: {{ day.daynumber }}</h4>
+                <p>Completed: {{ 'No' if not day.completed else 'Yes' }}</p>
+                <p>RPE: {{ day.RPE }}</p>
+                <p>Notes: {{ 'None' if day.usernotes == '' else day.usernotes }} </p>
+                <p>Number of workouts for this day: {{ day.workouts|count }}</p>
+                {% for workout in day.workouts %}
+                    <p>{{ workout.title }}</p>
+                {% endfor %}
+                <div>
+                    <!-- Form for Workout -->
+                    <form action="/create/workout/{{ program.id }}" method="POST">
+                        <input type="text" name="title" id="title" placeholder="Title" required>
+                        <br>
+                        <input type="text"name="warmup" id="warmup" placeholder="Warm-Up" required>
+                        <br>
+                        <input type="text"name="cooldown" id="cooldown" placeholder="Cooldown" required>
+                        <input type="hidden" name="day_id" id="day_id" value="{{ day.id }}">
+                        <br>
+                        <input type="submit" value="Save Workout">
+                    </form>
+                </div>
+                <br>
                 <form action="/delete/day/{{ day.id }}/{{ program.id }}" method="POST">
-                    <button>Remove</button>
+                    <button>Remove Day</button>
                 </form>
             {% endfor %}
+        <br> -----
         <form action="/create/day/{{ program.id }}" method="POST">
             <label for="daynumber">Add Day: </label>
             <input type="number" name="daynumber" id="daynumber">
@@ -26,7 +48,7 @@
             <input type="submit" value="Add">
         </form>
         <form action="/delete-week/{{ week.id }}/{{ program.id }}" method="POST">
-            <button type="submit">Delete</button>
+            <button type="submit">Remove Week</button>
         </form>
     {% endfor %}
     <form action="/create-week/{{program.id}}" method="POST">

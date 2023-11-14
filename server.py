@@ -3,6 +3,7 @@ from flask_app.controllers import users
 from flask_app.controllers import programs
 from flask_app.controllers import weeks
 from flask_app.controllers import days
+from flask_app.controllers import workouts
 
 
 if __name__ == "__main__":
