@@ -13,6 +13,9 @@
         <p>Program Name: <a href="/program/{{program.id}}">{{ program.title }}</a></p>
         <p>Program Description: {{ program.description }}</p>
         <p>Length of Program: {{program.weeks|length}} Weeks</p>
+        <form action="/delete/program/{{ program.id }}" method="POST">
+            <button>Delete</button>
+        </form>
         <br> ---------
     {% endfor %}
     <br>

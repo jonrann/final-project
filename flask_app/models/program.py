@@ -69,3 +69,23 @@ class Program:
             return cls(result[0])
         else:
             return "Program not found", None
+        
+    @classmethod
+    def update_program(cls, data):
+        query = """
+            UPDATE programs
+            SET title = %(title)s,
+                description = %(description)s
+            WHERE id = %(id)s;
+        """
+        return connectToMySQL('workout_tracker_schema').query_db(query, data)
+    
+    @classmethod
+    def delete_program(cls, program_id):
+        query = "DELETE FROM programs WHERE id = %(id)s;"
+        
+        data = {
+            'id' : program_id
+        }
+
+        return connectToMySQL('workout_tracker_schema').query_db(query, data)

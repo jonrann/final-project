@@ -22,6 +22,8 @@ def view_program_page(program_id):
     return render_template('view_program.html', program=program)
 
 
+# ----- POST ROUTES -----
+
 @app.route('/create-program', methods=['POST'])
 def create_program():
     # Check if user is logged in
@@ -49,3 +51,19 @@ def create_program():
     # Redirect to dashboard
     flash('Program created', 'success')
     return redirect(url_for('dashboard'))
+
+@app.route('/delete/program/<int:program_id>', methods=['POST'])
+def delete_program(program_id):
+    # Make sure user is logged in to delete a program
+    user_id = session.get('user_id')
+    if not user_id:
+        flash('Log in to create a program', 'danger')
+        return redirect(url_for('login_page'))
+
+    # Run query, delete program; check if successful else flash
+    if program_module.Program.delete_program(program_id):
+        flash('Program successfully deleted', 'success')
+        return redirect(url_for('dashboard'))
+    else:
+        flash('Failed to delete program', 'danger')
+        return redirect(url_for('view_program_page', program_id=program_id))
