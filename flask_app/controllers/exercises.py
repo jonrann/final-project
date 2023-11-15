@@ -40,3 +40,18 @@ def create_exercise(workout_id, day_id, program_id):
     workout.exercises.append(exercise)
 
     return redirect(url_for('view_day_page', day=day, program=program, day_id=day_id, program_id=program_id))
+
+@app.route('/update-exercise/<int:workout_id>/<int:day_id>/<int:program_id>', methods=['POST'])
+def update_exercise(workout_id, day_id, program_id):
+    user_id = session.get('user_id')
+    if not user_id:
+        flash('Log in to create a program', 'danger')
+        return redirect(url_for('login_page'))
+    
+    new_exercise_data = dict(request.form)
+    
+    if exercise_module.Exercise.update_exercise(new_exercise_data):
+        flash('Updated exercise', 'success')
+        return redirect(url_for('view_day_page', day_id=day_id, program_id=program_id, workout_id=workout_id))
+    flash('Failed to update', 'danger')
+    return redirect(url_for('view_day_page', day_id=day_id, program_id=program_id, workout_id=workout_id))

@@ -48,6 +48,29 @@ def create_day(program_id):
 
     return redirect(url_for('view_program_page', program_id=program_id))
 
+@app.route('/update/day/<int:day_id>/<int:program_id>', methods=['POST'])
+def update_day(day_id, program_id):
+    user_id = session.get('user_id')
+    if not user_id:
+        flash('Log in to create a program', 'danger')
+        return redirect(url_for('login_page'))
+    
+    new_day_data = dict(request.form)
+
+    # 0 or 1 means false or true in DB
+    if new_day_data.get('completed').lower() == 'yes':
+        new_day_data['completed'] = 1
+    else:
+        new_day_data['completed'] = 0
+
+    if day_module.Day.update_day(new_day_data):
+        flash('Day successfully updated', 'success')
+        return redirect(url_for('view_day_page', day_id=day_id, program_id=program_id))
+    flash('Failed to update day', 'danger')
+    return redirect(url_for('view_day_page', day_id=day_id, program_id=program_id))
+
+
+
 @app.route('/delete/day/<int:day_id>/<int:program_id>', methods=['POST'])
 def delete_day(day_id, program_id):
     # Ensure user is logged in to delete a day

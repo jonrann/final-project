@@ -65,6 +65,16 @@ class Workout:
         return workouts
     
     @classmethod
+    def update_workout(cls, data):
+        query = """
+            UPDATE workouts
+            SET warmup = %(warmup)s,
+                cooldown = %(cooldown)s
+            WHERE id = %(id)s;
+        """
+        return connectToMySQL('workout_tracker_schema').query_db(query, data)
+    
+    @classmethod
     def delete_workout(cls, workout_id):
         query = "DELETE FROM workouts WHERE id = %(id)s;"
 

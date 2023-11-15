@@ -69,6 +69,18 @@ class Day:
         return None
     
     @classmethod
+    def update_day(cls, data):
+        query = """
+            UPDATE days
+            SET completed = %(completed)s,
+                RPE = %(RPE)s,
+                usernotes = %(usernotes)s
+            WHERE id = %(id)s;
+        """
+        return connectToMySQL('workout_tracker_schema').query_db(query, data)
+
+    
+    @classmethod
     def delete_day(cls, day_id):
         query = "DELETE FROM days WHERE id = %(id)s;"
 
