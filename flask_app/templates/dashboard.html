@@ -1,27 +1,49 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- Meta tags for responsiveness and compatibility -->
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    
     <title>Dashboard</title>
 </head>
-<body>
-    <h1>Hello, {{user.first_name}} {{user.last_name}}</h1>
-    <br>
-    <h2>Your Programs</h2>
-    {% for program in program_list %}
-        <p>Program Name: <a href="/program/{{program.id}}">{{ program.title }}</a></p>
-        <p>Program Description: {{ program.description }}</p>
-        <p>Length of Program: {{program.weeks|length}} Weeks</p>
-        <form action="/delete/program/{{ program.id }}" method="POST">
-            <button>Delete</button>
-        </form>
-        <br> ---------
-    {% endfor %}
-    <br>
-    <a href="/create/program">Create a Program</a>
-    <form action="/logout" method="POST">
-        <button>Logout</button>
-    </form>
+<body class="container mt-5">
+    <!-- User Greeting -->
+    <div class="row">
+        <div class="col">
+            <h1>Hello, {{user.first_name}} {{user.last_name}}</h1>
+        </div>
+    </div>
+
+    <!-- Programs List -->
+    <div class="row mt-4">
+        <div class="col">
+            <h2>Your Programs</h2>
+            {% for program in program_list %}
+                <div class="border-bottom pb-3 mb-3">
+                    <p><strong>Program Name:</strong> <a href="/program/{{program.id}}" class="text-primary">{{ program.title }}</a></p>
+                    <p><strong>Program Description:</strong> {{ program.description }}</p>
+                    <p><strong>Length of Program:</strong> {{program.weeks|length}} Weeks</p>
+                    <form action="/delete/program/{{ program.id }}" method="POST">
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                    </form>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Create Program and Logout Buttons -->
+    <div class="row">
+        <div class="col">
+            <a href="/create/program" class="btn btn-success mb-2">Create a Program</a>
+            <form action="/logout" method="POST">
+                <button type="submit" class="btn btn-secondary">Logout</button>
+            </form>
+        </div>
+    </div>
 </body>
 </html>

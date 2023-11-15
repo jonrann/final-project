@@ -2,6 +2,7 @@ from flask import render_template, request, redirect, session, flash, url_for
 from flask_app.models import user as user_module
 from flask_app.models import program as program_module
 from flask_app.models import week as week_module
+from flask_app.models import day as day_module
 
 from flask_app import app
 
@@ -19,9 +20,10 @@ def view_program_page(program_id):
     # Get all days associated with each week
     for week in program.weeks:
         week.get_all_days()
-    if program.weeks:
-        for day in week.days:
-            day.get_all_workouts()
+        if program.weeks:
+            for day in week.days:
+                day.get_all_workouts()
+    
     return render_template('view_program2.html', program=program)
 
 @app.route('/edit-program/<int:program_id>')

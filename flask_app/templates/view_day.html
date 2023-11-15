@@ -1,47 +1,106 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- Meta tags for responsiveness and compatibility -->
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    
     <title>Day: {{ day.daynumber }}</title>
 </head>
-<body>
-    <h1>Day: {{ day.daynumber }}</h1>
-    <form action="">
-        <label for="completed">Completed:</label>
-        <input type="text" name="completed" id="completed" value="{{ 'No' if not day.completed else 'Yes' }}">
-        <label for="RPE">RPE:</label>
-        <input type="text" name="RPE" id="RPE" value="{{ day.RPE }}">
-        <label for="usernotes">Notes:</label>
-        <input type="text" name="usernotes" id="usernotes" value="{{ day.usernotes }}">
-        <input type="submit" value="Edit">
-    </form>
-    <h1>Create a workout:</h1>
-    <form action="/create/workout/{{ program.id }}" method="POST">
-        <input type="text" name="title" id="title" placeholder="Title" required>
-        <br>
-        <input type="text"name="warmup" id="warmup" placeholder="Warm-Up">
-        <br>
-        <input type="text"name="cooldown" id="cooldown" placeholder="Cooldown">
-        <input type="hidden" name="day_id" id="day_id" value="{{ day.id }}">
-        <br>
-        <input type="submit" value="Save Workout">
+<body class="container mt-5">
+    <h1 class="text-center mb-4">Day: {{ day.daynumber }}</h1>
+
+    <!-- Edit Day Form -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <form action="" class="form-inline">
+                <div class="form-group mr-2">
+                    <label for="completed" class="mr-2">Completed:</label>
+                    <input type="text" name="completed" id="completed" value="{{ 'No' if not day.completed else 'Yes' }}" class="form-control">
+                </div>
+                <div class="form-group mr-2">
+                    <label for="RPE" class="mr-2">RPE:</label>
+                    <input type="text" name="RPE" id="RPE" value="{{ day.RPE }}" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="usernotes" class="mr-2">Notes:</label>
+                    <input type="text" name="usernotes" id="usernotes" value="{{ day.usernotes }}" class="form-control">
+                </div>
+                <button type="submit" class="btn btn-primary ml-2">Edit</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Remove Day Button -->
+    <form action="/delete/day/{{ day.id }}/{{ program.id }}" method="POST" class="mb-4">
+        <button class="btn btn-danger">Remove Day</button>
     </form>
 
-    <h2>Workouts: </h2>
-    {% for workout in workouts %}
-        <h3>{{ workout.title }}</h3>
-        <h3>Exercises: </h3>
-        {% for exercise in workout.exercises  %}
-            <strong>{{ exercise.title }}</strong>
-            <p>{{ exercise.content }}</p>
-        {% endfor %}
-        <br>
-        <a href="/create/exercise/{{ workout.id }}/{{ day.id }}/{{ program.id }}"><button>Add Exercise</button></a>
-        <form action="/delete/workout/{{ workout.id }}/{{ day.id }}/{{ program.id }}" method="POST">
-            <button>Delete Workout</button>
-        </form>
-    {% endfor %}
-    <a href="/program/{{ program.id }}">Back</a>
+    <!-- Create Workout Form -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <h2 class="card-title">Create a Workout:</h2>
+            <form action="/create/workout/{{ program.id }}" method="POST">
+                <div class="form-group">
+                    <input type="text" name="title" id="title" placeholder="Title" required class="form-control">
+                </div>
+                <div class="form-group">
+                    <input type="text"name="warmup" id="warmup" placeholder="Warm-Up" class="form-control">
+                </div>
+                <div class="form-group">
+                    <input type="text"name="cooldown" id="cooldown" placeholder="Cooldown" class="form-control">
+                </div>
+                <input type="hidden" name="day_id" id="day_id" value="{{ day.id }}">
+                <button type="submit" class="btn btn-success">Save Workout</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Workouts List -->
+    <h2 class="mb-3">Workouts:</h2>
+    {% if not workouts %}
+        <p>No workouts</p>
+    {% else %}
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                {% for workout in workouts %}
+                    <!-- Workout Title -->
+                    <thead>
+                        <tr>
+                            <th colspan="2">{{ workout.title }}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Exercises Listing -->
+                        <tr>
+                            <td>Exercises:</td>
+                            <td>
+                                {% if not workout.exercises %}
+                                    <p>Add an exercise</p>
+                                {% else %}
+                                    {% for exercise in workout.exercises %}
+                                        <div><strong>{{ exercise.title }}</strong>: {{ exercise.content }}</div>
+                                    {% endfor %}
+                                {% endif %}
+                            </td>
+                        </tr>
+                        <!-- Action Buttons -->
+                        <tr>
+                            <td colspan="2" class="text-center">
+                                <a href="/create/exercise/{{ workout.id }}/{{ day.id }}/{{ program.id }}" class="btn btn-primary">Add Exercise</a>
+                                <form action="/delete/workout/{{ workout.id }}/{{ day.id }}/{{ program.id }}" method="POST" class="d-inline">
+                                    <button class="btn btn-danger">Delete Workout</button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+    {% endif %}
+    <a href="/program/{{ program.id }}" class="btn btn-secondary mt-3">Back</a>
 </body>
 </html>
