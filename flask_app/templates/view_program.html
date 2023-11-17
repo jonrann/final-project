@@ -10,6 +10,12 @@
     <title>Program Details</title>
 </head>
 <body class="container mt-5" style="padding: 30px;">
+    <!-- Flashed Messages for Program Form -->
+    {% for message in get_flashed_messages(category_filter=['program_error']) %}
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        {{ message }}
+    </div>
+    {% endfor %}
     <!-- Program Title and Description -->
     <div class="row mb-4 section-border">
         <div class="col">
@@ -22,18 +28,25 @@
 <!-- Form to Add Week -->
 <div class="row form-section">
     <div class="col">
-        <form action="/create-week/{{ program.id }}" method="POST" class="form-inline">
-            <!-- Hidden field for week number -->
-            <input type="hidden" name="weeknumber" id="weeknumber" value="{{ next_week_number }}">
-            <input type="submit" value="Add Week" class="btn btn-success">
-        </form>
+        <!-- Check if next_week_number is less than 8 -->
+        {% if next_week_number < 9 %}
+            <form action="/create-week/{{ program.id }}" method="POST" class="form-inline">
+                <!-- Hidden field for week number -->
+                <input type="hidden" name="weeknumber" id="weeknumber" value="{{ next_week_number }}">
+                <input type="submit" value="Add Week" class="btn btn-success">
+            </form>
+        {% else %}
+            <!-- Optionally, you can display a message here when the maximum weeks are reached -->
+            <p>Maximum number of weeks reached.</p>
+        {% endif %}
     </div>
 </div>
+
 
 <!-- Weeks Display Section -->
 {% if program.weeks %}
     {% for week in program.weeks %}
-        <div class="week-card mb-4"> <!-- Added margin for separation between weeks -->
+        <div class="week-card mb-4">
             <div class="row">
                 <div class="col">
                     <!-- Header and Add Day Form -->

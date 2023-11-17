@@ -16,18 +16,12 @@
     {% for message in get_flashed_messages(category_filter=['login_error']) %}
     <div class="alert alert-danger alert-dismissible fade show" role="alert">
         {{ message }}
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-        </button>
     </div>
     {% endfor %}
     <!-- Flashed Messages for Register -->
     {% for message in get_flashed_messages(category_filter=['register_error']) %}
     <div class="alert alert-danger alert-dismissible fade show" role="alert">
         {{ message }}
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-        </button>
     </div>
     {% endfor %}
     <div class="row">

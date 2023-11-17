@@ -35,7 +35,8 @@ def view_program_page(program_id):
         week.next_day_number = min(len(week.days) + 1, 7)
 
     # Calculate the next week number, ensuring it doesn't exceed 8
-    next_week_number = min(len(program.weeks) + 1, 8)
+    next_week_number = min(len(program.weeks) + 1, 9)
+    print(next_week_number)
 
     return render_template('view_program.html', program=program, next_week_number=next_week_number)
 
@@ -63,6 +64,8 @@ def create_program():
 
     # Retrieve data from form
     program_data = dict(request.form)
+    if not program_module.Program.validate_program(program_data):
+        return redirect(url_for('dashboard'))
     # Add user_id into retrieved data
     program_data['user_id'] = user_id
     
@@ -107,6 +110,8 @@ def update_program(program_id):
     
     # Retrieve updated data from form
     new_program_data = dict(request.form)
+    if not program_module.Program.validate_program(new_program_data):
+        return redirect(url_for('view_program_page', program_id=program_id))
     # Take data and run through in query
     if program_module.Program.update_program(new_program_data):
         # Redirect to program details page

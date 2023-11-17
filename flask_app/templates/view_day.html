@@ -43,7 +43,7 @@
                             <div class="form-group col-md-6">
                                 <label for="RPE">RPE:</label>
                                 <input type="number" name="RPE" id="RPE" value="{{ day.RPE }}" class="form-control" min="1" max="10">
-                            </div>                            
+                            </div>
                         </div>
                         <div class="form-group">
                             <label for="usernotes">Notes:</label>
@@ -69,10 +69,10 @@
                                 <input type="text" name="title" id="title" placeholder="Title" required class="form-control">
                             </div>
                             <div class="form-group">
-                                <input type="text"name="warmup" id="warmup" placeholder="Warm-Up" class="form-control">
+                                <textarea name="warmup" id="warmup" class="form-control" rows="3" placeholder="Warm-Up"></textarea>
                             </div>
                             <div class="form-group">
-                                <input type="text"name="cooldown" id="cooldown" placeholder="Cooldown" class="form-control">
+                                <textarea name="cooldown" id="cooldown" class="form-control" rows="3" placeholder="Cooldown"></textarea>
                             </div>
                             <input type="hidden" name="day_id" id="day_id" value="{{ day.id }}">
                             <button type="submit" class="btn btn-success">Save Workout</button>
@@ -100,7 +100,6 @@
                             <div class="card-body">
                                 <h5 class="card-title">Warm-Up</h5>
                                 <p class="card-text">{{ workout.warmup }}</p>
-                                
                                 <h5 class="card-title">Exercises: </h5>
                                 {% if not workout.exercises %}
                                     <p class="text-muted">Add an exercise</p>

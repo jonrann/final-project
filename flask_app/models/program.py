@@ -89,3 +89,18 @@ class Program:
         }
 
         return connectToMySQL('workout_tracker_schema').query_db(query, data)
+    
+    @staticmethod
+    def validate_program(data):
+        is_valid = True
+        # Title validation
+        if len(data['title']) < 2:
+            flash('Title must be at least 2 characters', 'program_error')
+            is_valid = False
+
+        # Description validation
+        if len(data['description']) < 2:
+            flash('Description must be at least 2 characters', 'program_error')
+            is_valid = False
+
+        return is_valid

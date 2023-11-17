@@ -23,6 +23,12 @@
             </form>
         </div>
     </div>
+    <!-- Flashed Messages for Program Form -->
+    {% for message in get_flashed_messages(category_filter=['program_error']) %}
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        {{ message }}
+    </div>
+    {% endfor %}
 
     <div class="row">
         <div class="col">
