@@ -60,20 +60,23 @@ def login():
         'email': request.form['email'],
         'password': request.form['password']
     }
+    if user_module.User.validate_login(user_data):
     # Check if email is in DB and create user object if true
-    user = user_module.User.get_one_by_email(user_data['email'])
+        user = user_module.User.get_one_by_email(user_data['email'])
 
-    if user:
-        # Check password if it matches hashed password in DB
-        if check_password_hash(user.password, user_data['password']):
-            session['user_id'] = user.id
-            flash('Login successful', 'login_success')
-            return redirect(url_for('dashboard'))
+        if user:
+            # Check password if it matches hashed password in DB
+            if check_password_hash(user.password, user_data['password']):
+                session['user_id'] = user.id
+                flash('Login successful', 'login_success')
+                return redirect(url_for('dashboard'))
+            else:
+                flash('Incorrect password', 'login_error')
+                return redirect(url_for('login_page'))
         else:
-            flash('Incorrect password', 'login_error')
+            flash('Email not found', 'login_error')
             return redirect(url_for('login_page'))
     else:
-        flash('Email not found', 'login_error')
         return redirect(url_for('login_page'))
 
 

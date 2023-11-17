@@ -7,16 +7,22 @@
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <title>Day: {{ day.daynumber }}</title>
 </head>
-<body class="container mt-5">
-    <h1 class="text-center mb-4">Day: {{ day.daynumber }}</h1>
+<body class="container mt-5" style="padding: 30px;">
+    <div class="row align-items-center">
+        <div class="col-md-8 col-sm-6">
+            <h1 class="text-center text-sm-left mb-4">Day: {{ day.daynumber }}</h1>
+        </div>
+        <div class="col-md-4 col-sm-6 text-right">
+            <form action="/delete/day/{{ day.id }}/{{ program.id }}" method="POST" class="mb-0">
+                <button class="btn btn-danger">Remove Day</button>
+            </form>
+        </div>
+    </div>
 
-
-    <!-- Row for both cards -->
     <div class="row">
-        <!-- Edit Day Form in a card, occupying half the row -->
         <div class="col-md-6">
             <div class="card mb-4">
-                <div class="card-body">
+                <div class="card-footer">
                     <form action="/update/day/{{ day.id }}/{{ program.id }}" method="POST">
                         <div class="form-row">
                             <div class="form-group col-md-6">
@@ -36,8 +42,8 @@
                             </div>
                             <div class="form-group col-md-6">
                                 <label for="RPE">RPE:</label>
-                                <input type="text" name="RPE" id="RPE" value="{{ day.RPE }}" class="form-control">
-                            </div>
+                                <input type="number" name="RPE" id="RPE" value="{{ day.RPE }}" class="form-control" min="1" max="10">
+                            </div>                            
                         </div>
                         <div class="form-group">
                             <label for="usernotes">Notes:</label>
@@ -46,18 +52,12 @@
                         <input type="hidden" name="id" id="id" value="{{ day.id }}">
                         <div class="card-footer d-flex justify-content-between">
                             <button type="submit" class="btn btn-primary">Edit</button>
-                            <!-- Remove Day Button in a form -->
-                            <form action="/delete/day/{{ day.id }}/{{ program.id }}" method="POST" class="mb-0">
-                                <button class="btn btn-danger">Remove Day</button>
-                            </form>
                         </div>
-                        
                     </form>
                 </div>
             </div>
         </div>
 
-        <!-- Create Workout Form in a card, occupying the other half of the row -->
         <div class="col-md-6">
             <div class="card mb-4">
                 <!-- Create Workout Form -->
@@ -83,61 +83,64 @@
         </div>
 
     <!-- Workouts List -->
-    <h2 class="mb-3">Workout Plans:</h2>
-    {% if not workouts %}
-        <p>No workouts</p>
-    {% else %}
-        <div class="table-responsive">
-            <table class="table table-bordered">
+    <div class="container mt-4">
+        <h2 class="mb-4 text-center">Workout Plans:</h2>
+        {% if not workouts %}
+            <div class="alert alert-info text-center" role="alert">
+                No workouts
+            </div>
+        {% else %}
+            <div class="row">
                 {% for workout in workouts %}
-                    <!-- Workout Title -->
-                    <thead>
-                        <tr>
-                            <th colspan="2">{{ workout.title }}</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <!-- Exercises Listing -->
-                        <tr>
-                            <td>
-                                <div><h6><strong>Warm-Up: {{ workout.warmup }}</strong></h6></div>
+                    <div class="col">
+                        <div class="card">
+                            <div class="card-header">
+                                {{ workout.title }}
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">Warm-Up</h5>
+                                <p class="card-text">{{ workout.warmup }}</p>
+                                
+                                <h5 class="card-title">Exercises: </h5>
                                 {% if not workout.exercises %}
-                                    <p>Add an exercise</p>
+                                    <p class="text-muted">Add an exercise</p>
                                 {% else %}
                                     {% for exercise in workout.exercises %}
-                                        <div id="exercise_display_{{ exercise.id }}">
-                                            <strong onclick="showEditForm({{ exercise.id }})" style="cursor: pointer;">{{ exercise.title }}</strong>: 
-                                            <span onclick="showEditForm({{ exercise.id }})" style="cursor: pointer;">{{ exercise.content }}</span>
-                                        </div>
-                                        <div id="exercise_edit_form_{{ exercise.id }}" style="display: none;">
-                                            <form action="/update-exercise/{{ workout.id }}/{{ day.id }}/{{ program.id }}" method="POST">
-                                                <input type="text" name="title" value="{{ exercise.title }}">
-                                                <input type="text" name="content" value="{{ exercise.content }}">
-                                                <input type="hidden" name="id" id="id" value="{{ exercise.id }}">
-                                                <input type="submit" value="Save">
-                                                <button type="button" onclick="hideEditForm({{ exercise.id }})">Cancel</button>
-                                            </form>
-                                        </div>
+                                    <div id="exercise_display_{{ exercise.id }}" class="exercise-display">
+                                        <strong onclick="showEditForm({{ exercise.id }})" style="cursor: pointer;">{{ exercise.title }}</strong>:
+                                        <span onclick="showEditForm({{ exercise.id }})" style="cursor: pointer;">{{ exercise.content }}</span>
+                                    </div>
+                                    <div id="exercise_edit_form_{{ exercise.id }}" style="display: none;">
+                                        <form action="/update-exercise/{{ workout.id }}/{{ day.id }}/{{ program.id }}" method="POST">
+                                            <input type="text" name="title" value="{{ exercise.title }}" class="form-control mb-1">
+                                            <input type="text" name="content" value="{{ exercise.content }}" class="form-control mb-1">
+                                            <input type="hidden" name="id" id="id" value="{{ exercise.id }}">
+                                            <button type="submit" class="btn btn-primary btn-sm mr-2">Save</button>
+                                            <button type="button" onclick="hideEditForm({{ exercise.id }})" class="btn btn-secondary btn-sm">Cancel</button>
+                                        </form>
+                                    </div>
                                     {% endfor %}
                                 {% endif %}
-                                <div><strong>Cooldown: {{ workout.cooldown }}</strong></div>
-                            </td>
-                        </tr>
-                        <!-- Action Buttons -->
-                        <tr>
-                            <td colspan="2" class="text-center">
-                                <a href="/create/exercise/{{ workout.id }}/{{ day.id }}/{{ program.id }}" class="btn btn-primary">Add Exercise</a>
-                                <form action="/delete/workout/{{ workout.id }}/{{ day.id }}/{{ program.id }}" method="POST" class="d-inline">
-                                    <button class="btn btn-danger">Delete Workout</button>
-                                </form>
-                            </td>
-                        </tr>
-                    {% endfor %}
-                </table>
+                                <br>
+                                <h5 class="card-title">Cooldown</h5>
+                                <p class="card-text">{{ workout.cooldown }}</p>
+                            </div>
+                            <div class="card-footer text-center">
+                                <a href="/create/exercise/{{ workout.id }}/{{ day.id }}/{{ program.id }}" class="btn btn-primary btn-sm mr-2">Add Exercise</a>
+                                <button class="btn btn-danger btn-sm" form="deleteWorkout{{ workout.id }}">Delete Workout</button>
+                            </div>
+                        </div>
+                    </div>
+                    <form id="deleteWorkout{{ workout.id }}" action="/delete/workout/{{ workout.id }}/{{ day.id }}/{{ program.id }}" method="POST"></form>
+                {% endfor %}
             </div>
-    {% endif %}
+        {% endif %}
+    </div>
 
-        <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    <!-- Back Button -->
     <a href="/program/{{ program.id }}" class="btn btn-secondary mt-3">Back</a>
+
+    <!-- Scripts -->
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 </body>
 </html>

@@ -8,13 +8,11 @@ from flask_app import app
 
 # ----- RENDER ROUTES -----
 
-# Incomplete
-@app.route('/edit/day/<int:day_id>')
-def edit_day_page():
-    return render_template('')
-
 @app.route('/day/details/<int:day_id>/<int:program_id>')
 def view_day_page(day_id, program_id):
+    if 'user_id' not in session:
+        flash('Must log into view this page', 'danger')
+        return redirect(url_for('login_page'))
     program = program_module.Program.get_by_id(program_id)
     day = day_module.Day.get_day_by_id(day_id)
     workouts = day.get_all_workouts()

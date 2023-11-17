@@ -8,11 +8,17 @@ from flask_app import app
 
 @app.route('/create/program')
 def create_program_page():
+    if 'user_id' not in session:
+        flash('Must log into view this page', 'danger')
+        return redirect(url_for('login_page'))
     return render_template('create_program.html')
 
 
 @app.route('/program/<int:program_id>')
 def view_program_page(program_id):
+    if 'user_id' not in session:
+        flash('Must log into view this page', 'danger')
+        return redirect(url_for('login_page'))
     # Get one specific program
     program = program_module.Program.get_by_id(program_id)
 
@@ -37,6 +43,9 @@ def view_program_page(program_id):
 
 @app.route('/edit-program/<int:program_id>')
 def view_edit_program_page(program_id):
+    if 'user_id' not in session:
+        flash('Must log into view this page', 'danger')
+        return redirect(url_for('login_page'))
     # Get content for one program
     program = program_module.Program.get_by_id(program_id)
     return render_template('edit_program.html', program=program)

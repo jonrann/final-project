@@ -13,9 +13,10 @@
 <body class="container mt-5" style="padding: 30px;"> 
     <!-- Top Row for User Greeting and Logout -->
     <div class="row mb-4">
-        <div class="col-9">
-            <h1>Hello, {{user.first_name}} {{user.last_name}}</h1>
-        </div>
+        <div class="col-9 d-flex justify-content-between">
+            <h2>YouCoach - Your Workout Tracker</h2>
+            <h2>Hello, {{ user.first_name }} {{ user.last_name }}</h2>
+        </div>        
         <div class="col-3 text-right">
             <form action="/logout" method="POST">
                 <button type="submit" class="btn btn-danger">Logout</button>
@@ -25,7 +26,7 @@
 
     <div class="row">
         <div class="col">
-            <h2 class="mb-4">Your Programs</h2> <!-- Increased bottom margin -->
+            <h3 class="mb-4">Your Programs</h3> <!-- Increased bottom margin -->
             {% for program in program_list %}
                 <div class="border p-4 my-4 rounded program-card" onclick="navigateToProgram('{{program.id}}')" style="cursor: pointer;"> <!-- Increased padding and margin -->
                     <!-- Program Card Header -->

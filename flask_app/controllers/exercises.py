@@ -11,6 +11,9 @@ from flask_app import app
 
 @app.route('/create/exercise/<int:workout_id>/<int:day_id>/<int:program_id>')
 def create_exercise_page(workout_id, day_id, program_id):
+    if 'user_id' not in session:
+        flash('Must log into view this page', 'danger')
+        return redirect(url_for('login_page'))
     workout = workout_module.Workout.get_workout_by_id(workout_id)
     program = program_module.Program.get_by_id(program_id)
     day = day_module.Day.get_day_by_id(day_id)

@@ -123,3 +123,22 @@ class User:
             flash('Passwords do not match', 'register_error')
             is_valid = False
         return is_valid
+    
+    @staticmethod
+    def validate_login(data):
+        is_valid = True
+        
+        # Validate email
+        if not data['email']:
+            flash('Email cannot be blank', 'login_error')
+            is_valid = False
+        elif not EMAIL_REGEX.match(data['email']):  # assuming EMAIL_REGEX is a valid regex for emails
+            flash('Invalid email address', 'login_error')
+            is_valid = False
+
+        # Validate password
+        if not data['password']:
+            flash('Password cannot be blank', 'login_error')
+            is_valid = False
+
+        return is_valid

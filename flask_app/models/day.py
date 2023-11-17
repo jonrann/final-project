@@ -8,7 +8,7 @@ class Day:
         self.week_id = data.get('week_id')
         self.daynumber = data.get('daynumber')
         self.completed = data.get('completed', False)
-        self.RPE = data.get('RPE', 0)
+        self.RPE = data.get('RPE', 1)
         self.usernotes = data.get('usernotes', '')
         self.workouts = [] # Can be multiple workouts in a day
         self.week = None
