@@ -5,45 +5,53 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <!-- Bootstrap CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
     <title>Dashboard</title>
 </head>
-<body class="container mt-5">
-    <!-- User Greeting -->
-    <div class="row">
-        <div class="col">
+
+<body class="container mt-5" style="padding: 30px;"> 
+    <!-- Top Row for User Greeting and Logout -->
+    <div class="row mb-4">
+        <div class="col-9">
             <h1>Hello, {{user.first_name}} {{user.last_name}}</h1>
+        </div>
+        <div class="col-3 text-right">
+            <form action="/logout" method="POST">
+                <button type="submit" class="btn btn-danger">Logout</button>
+            </form>
         </div>
     </div>
 
-    <!-- Programs List -->
-    <div class="row mt-4">
+    <div class="row">
         <div class="col">
-            <h2>Your Programs</h2>
+            <h2 class="mb-4">Your Programs</h2> <!-- Increased bottom margin -->
             {% for program in program_list %}
-                <div class="border-bottom pb-3 mb-3">
-                    <p><strong>Program Name:</strong> <a href="/program/{{program.id}}" class="text-primary">{{ program.title }}</a></p>
+                <div class="border p-4 my-4 rounded program-card" onclick="navigateToProgram('{{program.id}}')" style="cursor: pointer;"> <!-- Increased padding and margin -->
+                    <!-- Program Card Header -->
+                    <div class="d-flex justify-content-between align-items-start mb-3"> <!-- Added bottom margin -->
+                        <div>
+                            <h3 class="mb-1">{{ program.title }}</h3> <!-- Reduced bottom margin -->
+                            <small class="text-muted">({{program.weeks|length}} Weeks)</small>
+                        </div>
+                        <form action="/delete/program/{{ program.id }}" method="POST">
+                            <button type="submit" class="btn btn-danger">Delete</button>
+                        </form>
+                    </div>
+                    <!-- Program Description -->
                     <p><strong>Program Description:</strong> {{ program.description }}</p>
-                    <p><strong>Length of Program:</strong> {{program.weeks|length}} Weeks</p>
-                    <form action="/delete/program/{{ program.id }}" method="POST">
-                        <button type="submit" class="btn btn-danger">Delete</button>
-                    </form>
                 </div>
             {% endfor %}
         </div>
     </div>
+    
 
-    <!-- Create Program and Logout Buttons -->
-    <div class="row">
+    <!-- Create Program Button -->
+    <div class="row mt-4">
         <div class="col">
-            <a href="/create/program" class="btn btn-success mb-2">Create a Program</a>
-            <form action="/logout" method="POST">
-                <button type="submit" class="btn btn-secondary">Logout</button>
-            </form>
+            <a href="/create/program" class="btn btn-success">Create a Program</a>
         </div>
     </div>
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 </body>
 </html>

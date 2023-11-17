@@ -1,0 +1,62 @@
+.section-border {
+    border: 1px solid #ccc;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+.form-section {
+    padding: 20px;
+    margin-bottom: 20px;
+}
+.week-card {
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    transition: 0.3s;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+.week-card:hover {
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+}
+.table-bordered th, .table-bordered td {
+    border: 1px solid #dee2e6 !important;
+}
+
+.program-card {
+    cursor: pointer;
+    transition: box-shadow 0.3s;
+}
+.program-card:hover {
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+}
+
+body {
+    background-color: #f8f9fa; /* Light gray background for the whole page */
+}
+.program-card {
+    background-color: #ffffff; /* White background for cards */
+    border-color: #007bff; /* Blue border */
+}
+
+.workout-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 30px; /* Adjust as necessary */
+}
+
+.workout-table th,
+.workout-table td {
+    border: 1px solid #ddd;
+    padding: 8px; /* Adjust as necessary */
+}
+
+.exercise-row:hover {
+    background-color: #f2f2f2; /* Adjust as necessary */
+}
+
+.exercise-title {
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.edit-form {
+    display: none;
+}

@@ -20,3 +20,7 @@ function hideEditForm(exerciseId) {
     document.getElementById('exercise_edit_form_' + exerciseId).style.display = 'none';
     document.getElementById('exercise_display_' + exerciseId).style.display = 'block';
 }
+
+function navigateToProgram(programId) {
+    window.location.href = '/program/' + programId;
+}

@@ -5,6 +5,7 @@ from flask_app.controllers import weeks
 from flask_app.controllers import days
 from flask_app.controllers import workouts
 from flask_app.controllers import exercises
+from flask_app.controllers import chatbots
 
 
 if __name__ == "__main__":

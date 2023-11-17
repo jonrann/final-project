@@ -15,16 +15,25 @@ def create_program_page():
 def view_program_page(program_id):
     # Get one specific program
     program = program_module.Program.get_by_id(program_id)
+
     # Get all the weeks associated with that program
     program.get_all_weeks()
-    # Get all days associated with each week
+
+    # Get all days associated with each week and calculate next day number
     for week in program.weeks:
         week.get_all_days()
-        if program.weeks:
-            for day in week.days:
-                day.get_all_workouts()
-    
-    return render_template('view_program2.html', program=program)
+        for day in week.days:
+            day.get_all_workouts()
+
+        # Calculate the next day number for each week, ensuring it doesn't exceed 7
+        week.next_day_number = min(len(week.days) + 1, 7)
+
+    # Calculate the next week number, ensuring it doesn't exceed 8
+    next_week_number = min(len(program.weeks) + 1, 8)
+
+    return render_template('view_program.html', program=program, next_week_number=next_week_number)
+
+
 
 @app.route('/edit-program/<int:program_id>')
 def view_edit_program_page(program_id):

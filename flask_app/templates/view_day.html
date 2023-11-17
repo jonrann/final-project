@@ -1,48 +1,89 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- Meta tags for responsiveness and compatibility -->
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <!-- Bootstrap CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    
     <title>Day: {{ day.daynumber }}</title>
 </head>
 <body class="container mt-5">
     <h1 class="text-center mb-4">Day: {{ day.daynumber }}</h1>
 
-    <!-- Edit Day Form -->
-    <div class="card mb-4">
-        <div class="card-body">
-            <form action="/update/day/{{ day.id }}/{{ program.id }}" class="form-inline" method="POST">
-                <div class="form-group mr-2">
-                    <label for="completed" class="mr-2">Completed:</label>
-                    <input type="text" name="completed" id="completed" value="{{ 'No' if not day.completed else 'Yes' }}" class="form-control">
-                </div>
-                <div class="form-group mr-2">
-                    <label for="RPE" class="mr-2">RPE:</label>
-                    <input type="text" name="RPE" id="RPE" value="{{ day.RPE }}" class="form-control">
-                </div>
-                <div class="form-group">
-                    <label for="usernotes" class="mr-2">Notes:</label>
-                    <input type="text" name="usernotes" id="usernotes" value="{{ day.usernotes }}" class="form-control">
-                </div>
-                <input type="hidden" name="id" id="id" value="{{ day.id }}">
-                <button type="submit" class="btn btn-primary ml-2">Edit</button>
-            </form>
-        </div>
-    </div>
 
-    <!-- Remove Day Button -->
-    <form action="/delete/day/{{ day.id }}/{{ program.id }}" method="POST" class="mb-4">
-        <button class="btn btn-danger">Remove Day</button>
-    </form>
+    <!-- Row for both cards -->
+    <div class="row">
+        <!-- Edit Day Form in a card, occupying half the row -->
+        <div class="col-md-6">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <form action="/update/day/{{ day.id }}/{{ program.id }}" method="POST">
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="completed">Completed:</label>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="completed" id="completedYes" value="Yes" {{ 'checked' if day.completed else '' }}>
+                                    <label class="form-check-label" for="completedYes">
+                                        Yes
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="completed" id="completedNo" value="No" {{ 'checked' if not day.completed else '' }}>
+                                    <label class="form-check-label" for="completedNo">
+                                        No
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="RPE">RPE:</label>
+                                <input type="text" name="RPE" id="RPE" value="{{ day.RPE }}" class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="usernotes">Notes:</label>
+                            <textarea name="usernotes" id="usernotes" class="form-control" rows="3">{{ day.usernotes }}</textarea>
+                        </div>
+                        <input type="hidden" name="id" id="id" value="{{ day.id }}">
+                        <div class="card-footer d-flex justify-content-between">
+                            <button type="submit" class="btn btn-primary">Edit</button>
+                            <!-- Remove Day Button in a form -->
+                            <form action="/delete/day/{{ day.id }}/{{ program.id }}" method="POST" class="mb-0">
+                                <button class="btn btn-danger">Remove Day</button>
+                            </form>
+                        </div>
+                        
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Create Workout Form in a card, occupying the other half of the row -->
+        <div class="col-md-6">
+            <div class="card mb-4">
+                <!-- Create Workout Form -->
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h2 class="card-title">Create a Workout:</h2>
+                        <form action="/create/workout/{{ program.id }}" method="POST">
+                            <div class="form-group">
+                                <input type="text" name="title" id="title" placeholder="Title" required class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <input type="text"name="warmup" id="warmup" placeholder="Warm-Up" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <input type="text"name="cooldown" id="cooldown" placeholder="Cooldown" class="form-control">
+                            </div>
+                            <input type="hidden" name="day_id" id="day_id" value="{{ day.id }}">
+                            <button type="submit" class="btn btn-success">Save Workout</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
 
     <!-- Workouts List -->
-    <h2 class="mb-3">Workouts:</h2>
+    <h2 class="mb-3">Workout Plans:</h2>
     {% if not workouts %}
         <p>No workouts</p>
     {% else %}
@@ -59,7 +100,7 @@
                         <!-- Exercises Listing -->
                         <tr>
                             <td>
-                                <div><strong>Warm-Up: {{ workout.warmup }}</strong></div>
+                                <div><h6><strong>Warm-Up: {{ workout.warmup }}</strong></h6></div>
                                 {% if not workout.exercises %}
                                     <p>Add an exercise</p>
                                 {% else %}
@@ -96,25 +137,6 @@
             </div>
     {% endif %}
 
-        <!-- Create Workout Form -->
-        <div class="card mb-4">
-            <div class="card-body">
-                <h2 class="card-title">Create a Workout:</h2>
-                <form action="/create/workout/{{ program.id }}" method="POST">
-                    <div class="form-group">
-                        <input type="text" name="title" id="title" placeholder="Title" required class="form-control">
-                    </div>
-                    <div class="form-group">
-                        <input type="text"name="warmup" id="warmup" placeholder="Warm-Up" class="form-control">
-                    </div>
-                    <div class="form-group">
-                        <input type="text"name="cooldown" id="cooldown" placeholder="Cooldown" class="form-control">
-                    </div>
-                    <input type="hidden" name="day_id" id="day_id" value="{{ day.id }}">
-                    <button type="submit" class="btn btn-success">Save Workout</button>
-                </form>
-            </div>
-        </div>
         <script src="{{ url_for('static', filename='js/script.js') }}"></script>
     <a href="/program/{{ program.id }}" class="btn btn-secondary mt-3">Back</a>
 </body>

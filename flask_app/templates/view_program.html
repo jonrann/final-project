@@ -1,61 +1,100 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+
     <title>Program Details</title>
 </head>
-<body>
-    <h1>Program Title: {{program.title}}</h1>
-    <h2>Program Details: {{program.description}}</h2>
+<body class="container mt-5" style="padding: 30px;">
+    <!-- Program Title and Description -->
+    <div class="row mb-4 section-border">
+        <div class="col">
+            <h1>{{ program.title }}</h1>
+            <p>{{ program.description }}</p>
+            <a href="/edit-program/{{ program.id }}" class="btn btn-primary">Edit info</a>
+        </div>
+    </div>
+
+<!-- Form to Add Week -->
+<div class="row form-section">
+    <div class="col">
+        <form action="/create-week/{{ program.id }}" method="POST" class="form-inline">
+            <!-- Hidden field for week number -->
+            <input type="hidden" name="weeknumber" id="weeknumber" value="{{ next_week_number }}">
+            <input type="submit" value="Add Week" class="btn btn-success">
+        </form>
+    </div>
+</div>
+
+<!-- Weeks Display Section -->
+{% if program.weeks %}
     {% for week in program.weeks %}
-        <h3>Program Week: {{week.weeknumber}}</h3>
-            {% for day in week.days %}
-                <h4>Day: {{ day.daynumber }}</h4>
-                <p>Completed: {{ 'No' if not day.completed else 'Yes' }}</p>
-                <p>RPE: {{ day.RPE }}</p>
-                <p>Notes: {{ 'None' if day.usernotes == '' else day.usernotes }} </p>
-                <p>Number of workouts for this day: {{ day.workouts|count }}</p>
-                {% for workout in day.workouts %}
-                    <p>{{ workout.title }}</p>
-                {% endfor %}
-                <div>
-                    <!-- Form for Workout -->
-                    <form action="/create/workout/{{ program.id }}" method="POST">
-                        <input type="text" name="title" id="title" placeholder="Title" required>
-                        <br>
-                        <input type="text"name="warmup" id="warmup" placeholder="Warm-Up" required>
-                        <br>
-                        <input type="text"name="cooldown" id="cooldown" placeholder="Cooldown" required>
-                        <input type="hidden" name="day_id" id="day_id" value="{{ day.id }}">
-                        <br>
-                        <input type="submit" value="Save Workout">
-                    </form>
+        <div class="week-card mb-4"> <!-- Added margin for separation between weeks -->
+            <div class="row">
+                <div class="col">
+                    <!-- Header and Add Day Form -->
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <div class="d-flex align-items-center">
+                            <h2 class="mb-0">Week {{ week.weeknumber }}</h2>
+                            <!-- Add Day Form -->
+                            {% if week.days|length < 7 %}
+                            <form action="/create/day/{{ program.id }}" method="POST" class="ml-2">
+                                <input type="hidden" name="daynumber" value="{{ week.next_day_number }}">
+                                <input type="hidden" name="week_id" value="{{ week.id }}">
+                                <input type="hidden" name="completed" value="0">
+                                <input type="hidden" name="RPE" value="0">
+                                <input type="hidden" name="usernotes" value="">
+                                <button type="submit" class="btn btn-success">Add Day</button>
+                            </form>
+                            {% endif %}
+                        </div>
+                        <!-- Delete Week Form -->
+                        <form action="/delete-week/{{ week.id }}/{{ program.id }}" method="POST">
+                            <button type="submit" class="btn btn-danger">Remove</button>
+                        </form>
+                    </div>
+
+                    <!-- Days Table -->
+                    <table class="table table-bordered">
+                        <tbody>
+                            <tr>
+                                {% for day in week.days %}
+                                    <td class="p-2"> <!-- Added padding -->
+                                        <a href="/day/details/{{ day.id }}/{{ program.id }}" class="d-block mb-2"> <!-- Added block display and margin -->
+                                            <strong>Day {{ day.daynumber }}</strong>
+                                        </a>
+                                        <strong>Workouts:</strong>
+                                        {% if not day.workouts %}
+                                            <p class="mt-2">No workouts</p> <!-- Added top margin -->
+                                        {% else %}
+                                            {% for workout in day.workouts %}
+                                                <p class="mt-2 mb-1">{{ workout.title }}</p> <!-- Adjusted margins -->
+                                            {% endfor %}
+                                        {% endif %}
+                                    </td>
+                                {% endfor %}
+                            </tr>
+                        </tbody>
+                    </table>
+
                 </div>
-                <br>
-                <form action="/delete/day/{{ day.id }}/{{ program.id }}" method="POST">
-                    <button>Remove Day</button>
-                </form>
-            {% endfor %}
-        <br> -----
-        <form action="/create/day/{{ program.id }}" method="POST">
-            <label for="daynumber">Add Day: </label>
-            <input type="number" name="daynumber" id="daynumber">
-            <input type="hidden" name="week_id" value="{{ week.id }}">
-            <input type="hidden" name="completed" value="0">
-            <input type="hidden"name="RPE" value="0">
-            <input type="hidden" name="usernotes" value="">
-            <input type="submit" value="Add">
-        </form>
-        <form action="/delete-week/{{ week.id }}/{{ program.id }}" method="POST">
-            <button type="submit">Remove Week</button>
-        </form>
+            </div>
+        </div>
     {% endfor %}
-    <form action="/create-week/{{program.id}}" method="POST">
-        <label for="weeknumber">Add Week</label>
-        <input type="number" name="weeknumber" id="weeknumber">
-        <input type="submit" value="Create Week">
-    </form>
-    <a href="/dashboard">Home</a>
+{% endif %}
+
+    <!-- Home Button -->
+    <div class="row">
+        <div class="col">
+            <a href="/dashboard" class="btn btn-secondary mt-3">Home</a>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
