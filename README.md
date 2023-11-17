@@ -1,4 +1,4 @@
-# final-project
+# Workout-Tracker "YouCoach" -- TrueCoach program creation functionality clone
 
 This final project is a simple CRUD web application.
 
