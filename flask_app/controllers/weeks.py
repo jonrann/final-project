@@ -4,6 +4,7 @@ from flask_app.models import program as program_module
 from flask_app.models import week as week_module
 from flask_app import app
 
+from flask import jsonify
 
 
 # ----- POST ROUTES -----
@@ -31,7 +32,15 @@ def create_week(program_id):
     # Add week to program object's attribute: weeks
     program.add_week(week)
 
-    return redirect(url_for('view_program_page', program=program, program_id=program_id))
+    next_week_number = len(program.weeks) + 1
+
+    return jsonify({
+        'success': True,
+        'week_id': week_id,
+        'program_id': program_id,
+        'weekNumber': week.weeknumber,  # The number of the week just created
+        'nextWeekNumber': next_week_number  # The number for 
+        })
 
 @app.route('/delete-week/<int:week_id>/<int:program_id>', methods=['POST'])
 def delete_week(week_id, program_id):

@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
-
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <title>Program Details</title>
 </head>
 <body class="container mt-5" style="padding: 30px;">
@@ -28,15 +28,12 @@
 <!-- Form to Add Week -->
 <div class="row form-section">
     <div class="col">
-        <!-- Check if next_week_number is less than 8 -->
         {% if next_week_number < 9 %}
-            <form action="/create-week/{{ program.id }}" method="POST" class="form-inline">
-                <!-- Hidden field for week number -->
+            <form id="addWeekForm" class="form-inline">
                 <input type="hidden" name="weeknumber" id="weeknumber" value="{{ next_week_number }}">
-                <input type="submit" value="Add Week" class="btn btn-success">
+                <input type="button" value="Add Week" class="btn btn-success" onclick="addWeek({{ program.id }})">
             </form>
         {% else %}
-            <!-- Optionally, you can display a message here when the maximum weeks are reached -->
             <p>Maximum number of weeks reached.</p>
         {% endif %}
     </div>
@@ -44,6 +41,7 @@
 
 
 <!-- Weeks Display Section -->
+<div id="weeksContainer">
 {% if program.weeks %}
     {% for week in program.weeks %}
         <div class="week-card mb-4">
@@ -99,7 +97,7 @@
         </div>
     {% endfor %}
 {% endif %}
-
+</div>
     <!-- Home Button -->
     <div class="row">
         <div class="col">
@@ -109,5 +107,6 @@
 
     <!-- Bootstrap JS -->
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 </body>
 </html>
