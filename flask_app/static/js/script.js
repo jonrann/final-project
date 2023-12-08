@@ -119,7 +119,7 @@ function addWeekToDOM(weekId, weekNumber, programId) {
 
     if (weekNumber <= 7) {  // Adjust this condition based on your program's logic
         const addDayForm = document.createElement('form');
-        addDayForm.action = `/create-day/${programId}`;
+        addDayForm.action = `/create/day/${programId}`;
         addDayForm.method = 'POST';
         addDayForm.className = 'ml-2 form-inline'; // Add any additional classes as needed
 
