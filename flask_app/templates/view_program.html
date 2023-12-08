@@ -28,14 +28,11 @@
 <!-- Form to Add Week -->
 <div class="row form-section">
     <div class="col">
-        {% if next_week_number < 9 %}
             <form id="addWeekForm" class="form-inline">
                 <input type="hidden" name="weeknumber" id="weeknumber" value="{{ next_week_number }}">
                 <input type="button" value="Add Week" class="btn btn-success" onclick="addWeek({{ program.id }})">
             </form>
-        {% else %}
-            <p>Maximum number of weeks reached.</p>
-        {% endif %}
+            <p id="maxWeeksReachedMessage" style="display: none;">Maximum number of weeks reached.</p>
     </div>
 </div>
 

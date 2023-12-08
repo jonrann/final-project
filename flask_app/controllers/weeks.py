@@ -32,14 +32,14 @@ def create_week(program_id):
     # Add week to program object's attribute: weeks
     program.add_week(week)
 
-    next_week_number = len(program.weeks) + 1
+    next_week_number = week.weeknumber + 1
 
     return jsonify({
         'success': True,
         'week_id': week_id,
         'program_id': program_id,
         'weekNumber': week.weeknumber,  # The number of the week just created
-        'nextWeekNumber': next_week_number  # The number for 
+        'nextWeekNumber': next_week_number 
         })
 
 @app.route('/delete-week/<int:week_id>/<int:program_id>', methods=['POST'])

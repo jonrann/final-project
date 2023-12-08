@@ -49,6 +49,19 @@ function addWeek(programId) {
             if (weekNumberInput) {
                 weekNumberInput.value = data.nextWeekNumber;
             }
+            // Check if the maximum number of weeks is reached
+            if (data.nextWeekNumber >= 8) {
+                // Hide the add week form/button
+                const addWeekForm = document.getElementById('addWeekForm');
+                if (addWeekForm) {
+                    addWeekForm.style.display = 'none';
+                }
+                // Optionally, show the 'Maximum number of weeks reached' message
+                const maxWeeksReachedMessage = document.getElementById('maxWeeksReachedMessage'); // Make sure to add this element to your HTML
+                if (maxWeeksReachedMessage) {
+                    maxWeeksReachedMessage.style.display = 'block';
+                }
+            }
         }
     });
 }
@@ -94,9 +107,6 @@ function addWeekToDOM(weekId, weekNumber, programId) {
     // Append innerDiv to headerDiv
     headerDiv.appendChild(innerDiv);
 
-    // Optionally, create and append the Add Day Form here if needed
-    // ...
-
     // Create and append the Delete Week Form
     const deleteForm = document.createElement('form');
     deleteForm.action = `/delete-week/${weekId}/${programId}`;
@@ -106,6 +116,45 @@ function addWeekToDOM(weekId, weekNumber, programId) {
     deleteButton.type = 'submit';
     deleteButton.className = 'btn btn-danger';
     deleteButton.textContent = 'Remove';
+
+    if (weekNumber <= 7) {  // Adjust this condition based on your program's logic
+        const addDayForm = document.createElement('form');
+        addDayForm.action = `/create-day/${programId}`;
+        addDayForm.method = 'POST';
+        addDayForm.className = 'ml-2 form-inline'; // Add any additional classes as needed
+
+        // Next day number is typically 1 since this is a new week
+        const nextDayNumber = 1;
+
+        // Create hidden inputs for the form
+        const inputs = [
+            { name: 'daynumber', value: nextDayNumber },
+            { name: 'week_id', value: weekId },
+            { name: 'completed', value: '0' },
+            { name: 'RPE', value: '0' },
+            { name: 'usernotes', value: '' }
+        ];
+
+        // Append inputs to the form
+        inputs.forEach(inputInfo => {
+            const input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = inputInfo.name;
+            input.value = inputInfo.value;
+            addDayForm.appendChild(input);
+        });
+
+        // Create and append the submit button to the form
+        const addDayButton = document.createElement('button');
+        addDayButton.type = 'submit';
+        addDayButton.className = 'btn btn-success';
+        addDayButton.textContent = 'Add Day';
+        addDayForm.appendChild(addDayButton);
+
+        // Append the form to the correct location within the weekCard
+        // Assuming it should be inside the innerDiv
+        innerDiv.appendChild(addDayForm);
+    }
 
     deleteForm.appendChild(deleteButton);
 
